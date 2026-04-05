@@ -1,3 +1,4 @@
+import { useUserDetails } from '../store/userDetailStore';
 import type { ContactT } from '../types';
 import { ContactItem } from './ContactItem';
 import { SidebarFooter } from './SidebarFooter';
@@ -20,6 +21,9 @@ export function Sidebar({
   const filtered = contacts.filter((c) =>
     c.name.toLowerCase().includes(search.toLowerCase()),
   );
+
+  const { userDetail } = useUserDetails();
+
   return (
     <div className='sidebar'>
       <div className='sidebar-header'>

@@ -18,3 +18,15 @@ export interface ConversationT {
   time: string;
   read: boolean;
 }
+
+export interface UserDetail {
+  message: string;
+  token: string;
+  user: User;
+}
+
+export interface User {
+  id: number;
+  name: string;
+  email: string;
+}

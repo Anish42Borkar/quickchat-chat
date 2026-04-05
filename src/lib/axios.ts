@@ -1,13 +1,14 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: import.meta.env.API_URL,
+  baseURL: import.meta.env.VITE_API_URL,
   withCredentials: true, // 🔥 required for cookies
 });
 
 // ✅ Request interceptor
 api.interceptors.request.use(
   (config) => {
+    console.log(import.meta.env.API_URL);
     // You can log or modify request here
     console.log('Request:', config.method?.toUpperCase(), config.url);
 
