@@ -1,10 +1,11 @@
 import { useUserDetails } from '../store/userDetailStore';
-import type { ContactT } from '../types';
+import { useSelectedConversation } from '../store/useSelectedConversation';
+import type { ConversationT } from '../types';
 import { ContactItem } from './ContactItem';
 import { SidebarFooter } from './SidebarFooter';
 
 type SidebarProps = {
-  contacts: ContactT[];
+  contacts: ConversationT[];
   activeId: number;
   search: string;
   onSearchChange: (search: string) => void;
@@ -19,10 +20,11 @@ export function Sidebar({
   onSelectContact,
 }: SidebarProps) {
   const filtered = contacts.filter((c) =>
-    c.name.toLowerCase().includes(search.toLowerCase()),
+    c.otherUserName.toLowerCase().includes(search.toLowerCase()),
   );
 
   const { userDetail } = useUserDetails();
+  const { updateSelectedConversation } = useSelectedConversation();
 
   return (
     <div className='sidebar'>
@@ -45,10 +47,13 @@ export function Sidebar({
       <div className='contact-list'>
         {filtered.map((c) => (
           <ContactItem
-            key={c.id}
+            key={c.conversationId}
             contact={c}
-            isActive={activeId === c.id}
-            onClick={() => onSelectContact(c.id)}
+            // isActive={activeId === c.}
+            onClick={() => {
+              updateSelectedConversation(c);
+              onSelectContact(c.conversationId);
+            }}
           />
         ))}
       </div>

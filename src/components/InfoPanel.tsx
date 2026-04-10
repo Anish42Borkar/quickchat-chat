@@ -1,8 +1,8 @@
 import { MEDIA_COLORS, MEDIA_ICONS } from '../data';
-import type { ContactT, ConversationT } from '../types';
+import type { ConversationT } from '../types';
 import { ProfileSection } from './ProfileSection';
 
-type InfoPanelProps = { contact: ContactT; messages: ConversationT[] };
+type InfoPanelProps = { contact: any; messages: ConversationT[] };
 
 export function InfoPanel({ contact, messages }: InfoPanelProps) {
   const statusColor =

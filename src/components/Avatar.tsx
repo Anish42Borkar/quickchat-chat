@@ -25,7 +25,8 @@ export function Avatar({
           fontSize: size * 0.38,
         }}
       >
-        {name}
+        {name.split(' ')?.[0]?.[0]}
+        {name.split(' ')?.[1]?.[0]}
       </div>
       {status && <span className={`status-dot ${status}`} />}
     </div>

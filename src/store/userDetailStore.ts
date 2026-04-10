@@ -1,10 +1,10 @@
 import { create } from 'zustand';
-import type { UserDetail } from '../types';
+import type { UserT } from '../types';
 
 type UserDetailsProps = {
-  userDetail: UserDetail | null;
+  userDetail: UserT | null;
   clearUserDetails: () => void;
-  updateUserDetails: (data: UserDetail | null) => void;
+  updateUserDetails: (data: UserT | null) => void;
 };
 
 export const useUserDetails = create<UserDetailsProps>((set) => ({

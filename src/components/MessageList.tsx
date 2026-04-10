@@ -1,11 +1,12 @@
 import { useEffect, useRef } from 'react';
 import { MessageBubble } from './MessageBubble';
 import { TypingIndicator } from './TypingIndicator';
-import type { ContactT, ConversationT } from '../types';
+import type { ConversationT, MessageT } from '../types';
+import { useUserDetails } from '../store/userDetailStore';
 
 type MessageListProps = {
-  messages: ConversationT[];
-  contact: ContactT;
+  messages: MessageT[];
+  contact: ConversationT;
   isTyping: boolean;
 };
 
@@ -18,27 +19,30 @@ export function MessageList({ messages, contact, isTyping }: MessageListProps) {
   return (
     <div className='messages-wrap'>
       <div className='date-divider'>Today</div>
+
       {messages.map((msg, i) => {
         const next = messages[i + 1];
-        const hideAvatar = !msg.me && !!next && !next.me;
-        const showMeta = !next || next.me !== msg.me;
+        // const hideAvatar = !msg.me && !!next && !next.me;
+        // const showMeta = !next || next.me !== msg.me;
         return (
           <MessageBubble
-            key={msg.id}
+            key={i}
             message={msg}
-            showAvatar={!hideAvatar}
-            showMeta={showMeta}
-            avatarColor={contact.color}
-            avatarEmoji={contact.emoji}
+            showAvatar={!true}
+            showMeta={true}
+            // showAvatar={!hideAvatar}
+            // showMeta={showMeta}
+            avatarColor={'contact.color'}
+            avatarEmoji={'contact.emoji'}
           />
         );
       })}
       {isTyping && (
         <div className='msg-row them'>
-          <div className='msg-avatar' style={{ background: contact.color }}>
-            {contact.emoji}
+          <div className='msg-avatar' style={{ background: 'contact.color' }}>
+            {'contact.emoji'}
           </div>
-          <TypingIndicator name={contact.name} />
+          <TypingIndicator name={contact.otherUserName} />
         </div>
       )}
       <div ref={endRef} />

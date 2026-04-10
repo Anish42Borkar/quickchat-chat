@@ -1,12 +1,12 @@
 import type { Dispatch } from 'react';
-import type { ContactT, ConversationT } from '../types';
+import type { ConversationT, MessageT } from '../types';
 import { ChatHeader } from './ChatHeader';
 import { MessageInput } from './MessageInput';
 import { MessageList } from './MessageList';
 
 type chartAreaProps = {
-  contact: ContactT | undefined;
-  messages: ConversationT[];
+  contact: ConversationT | null;
+  messages: MessageT[];
   isTyping: boolean;
   input: string;
   onInputChange: Dispatch<React.SetStateAction<string>>;
@@ -36,16 +36,17 @@ export function ChatArea({
             value={input}
             onChange={onInputChange}
             onSend={onSend}
-            placeholder={`Message ${contact.name.split(' ')[0]}…`}
+            placeholder={`Message ${contact.otherUserName.split(' ')[0]}…`}
           />
         </>
       ) : (
         <div className='empty-state'>
-          <div className='empty-icon'>💬</div>
+          <img src='/dark-them-stale-section.png' />
+          {/* <div className='empty-icon'>💬</div>
           <div className='empty-title'>No chat selected</div>
           <div className='empty-sub'>
             Choose a conversation to start messaging
-          </div>
+          </div> */}
         </div>
       )}
     </div>

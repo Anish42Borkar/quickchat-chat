@@ -1,7 +1,8 @@
-import type { ConversationT } from '../types';
+import { useUserDetails } from '../store/userDetailStore';
+import type { MessageT } from '../types';
 
 type MessageBubbleProps = {
-  message: ConversationT;
+  message: MessageT;
   showAvatar: boolean;
   showMeta: boolean;
   avatarColor: string;
@@ -15,10 +16,14 @@ export function MessageBubble({
   avatarColor,
   avatarEmoji,
 }: MessageBubbleProps) {
-  const side = message.me ? 'me' : 'them';
+  const { userDetail } = useUserDetails();
+
+  // const side = message.me ? 'me' : 'them';
+  const side = message.senderId === userDetail?.userId ? 'me' : 'them';
+
   return (
     <div className={`msg-row ${side}`}>
-      {!message.me && (
+      {!side && (
         <div
           className={`msg-avatar ${showAvatar ? '' : 'hidden'}`}
           style={{ background: avatarColor }}
@@ -27,11 +32,11 @@ export function MessageBubble({
         </div>
       )}
       <div className='msg-group'>
-        <div className={`bubble ${side}`}>{message.text}</div>
+        <div className={`bubble ${side}`}>{message.content}</div>
         {showMeta && (
           <div className='msg-meta'>
-            <span>{message.time}</span>
-            {message.me && <span className='read-tick'>✓✓</span>}
+            {/* <span>{message.time}</span>
+            {message.me && <span className='read-tick'>✓✓</span>} */}
           </div>
         )}
       </div>

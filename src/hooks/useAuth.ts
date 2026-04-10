@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react';
 import api from '../lib/axios';
-import type { UserDetail } from '../types';
+import type { UserT } from '../types';
 
 export const useAuth = () => {
   const [loading, setLoading] = useState(true);
   const [isAuth, setIsAuth] = useState(false);
-  const [userDetail, setUserDetail] = useState<UserDetail | null>(null);
+  const [userDetail, setUserDetail] = useState<UserT | null>(null);
 
   function checkCookieDetail() {
     api
-      .get<UserDetail>('/auth/me')
+      .get<UserT>('/auth/me')
       .then((res) => {
         setIsAuth(true);
         setUserDetail(res.data);
