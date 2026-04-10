@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react';
+import api from '../lib/axios';
 import { useUserDetails } from '../store/userDetailStore';
 import { useSelectedConversation } from '../store/useSelectedConversation';
 import type { ConversationT } from '../types';
@@ -7,24 +9,29 @@ import { SidebarFooter } from './SidebarFooter';
 type SidebarProps = {
   contacts: ConversationT[];
   activeId: number;
-  search: string;
-  onSearchChange: (search: string) => void;
   onSelectContact: (id: number) => void;
 };
 
-export function Sidebar({
-  contacts,
-  activeId,
-  search,
-  onSearchChange,
-  onSelectContact,
-}: SidebarProps) {
-  const filtered = contacts.filter((c) =>
-    c.otherUserName.toLowerCase().includes(search.toLowerCase()),
-  );
+export function Sidebar({ contacts, activeId, onSelectContact }: SidebarProps) {
+  const [conversations, setConversations] = useState<ConversationT[]>([]);
+  const [search, setSearch] = useState('');
 
   const { userDetail } = useUserDetails();
   const { updateSelectedConversation } = useSelectedConversation();
+
+  const filtered = conversations.filter((c) =>
+    c.otherUserName.toLowerCase().includes(search.toLowerCase()),
+  );
+
+  async function getconversations() {
+    const result = await api.get<ConversationT[]>('/chat/conversationsList');
+    setConversations(result.data);
+    console.log(result);
+  }
+
+  useEffect(() => {
+    getconversations();
+  }, []);
 
   return (
     <div className='sidebar'>
@@ -39,7 +46,7 @@ export function Sidebar({
             className='search-input'
             placeholder='Search conversations...'
             value={search}
-            onChange={(e) => onSearchChange(e.target.value)}
+            onChange={(e) => setSearch(e.target.value)}
           />
         </div>
       </div>

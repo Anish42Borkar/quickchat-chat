@@ -27,11 +27,7 @@ export function ChatArea({
       {contact ? (
         <>
           <ChatHeader contact={contact} />
-          <MessageList
-            messages={messages}
-            contact={contact}
-            isTyping={isTyping}
-          />
+          <MessageList contact={contact} isTyping={isTyping} />
           <MessageInput
             value={input}
             onChange={onInputChange}
