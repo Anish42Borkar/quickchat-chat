@@ -5,9 +5,9 @@ import App from './App.tsx';
 import { ProtectedRoute } from './ProtectedRoute.tsx';
 
 createRoot(document.getElementById('root')!).render(
-  // <StrictMode>
-  <ProtectedRoute>
-    <App />
-  </ProtectedRoute>,
-  // </StrictMode>,
+  <StrictMode>
+    <ProtectedRoute>
+      <App />
+    </ProtectedRoute>
+  </StrictMode>,
 );

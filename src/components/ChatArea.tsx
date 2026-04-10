@@ -1,26 +1,15 @@
-import type { Dispatch } from 'react';
-import type { ConversationT, MessageT } from '../types';
+import { useSelectedConversation } from '../store/useSelectedConversation';
 import { ChatHeader } from './ChatHeader';
 import { MessageInput } from './MessageInput';
 import { MessageList } from './MessageList';
 
 type chartAreaProps = {
-  contact: ConversationT | null;
-  messages: MessageT[];
   isTyping: boolean;
-  input: string;
-  onInputChange: Dispatch<React.SetStateAction<string>>;
-  onSend: () => void;
 };
 
-export function ChatArea({
-  contact,
-  messages,
-  isTyping,
-  input,
-  onInputChange,
-  onSend,
-}: chartAreaProps) {
+export function ChatArea({ isTyping }: chartAreaProps) {
+  const { selectedConversation: contact } = useSelectedConversation();
+
   return (
     <div className='chat-area'>
       <div className='chat-bg' />
@@ -29,9 +18,6 @@ export function ChatArea({
           <ChatHeader contact={contact} />
           <MessageList contact={contact} isTyping={isTyping} />
           <MessageInput
-            value={input}
-            onChange={onInputChange}
-            onSend={onSend}
             placeholder={`Message ${contact.otherUserName.split(' ')[0]}…`}
           />
         </>

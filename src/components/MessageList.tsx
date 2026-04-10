@@ -1,11 +1,10 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useSocket } from '../hooks/useSocket';
+import api from '../lib/axios';
+import { useSelectedConversation } from '../store/useSelectedConversation';
+import type { ConversationT, MessageT } from '../types';
 import { MessageBubble } from './MessageBubble';
 import { TypingIndicator } from './TypingIndicator';
-import type { ConversationT, MessageT } from '../types';
-import { useUserDetails } from '../store/userDetailStore';
-import { useSelectedConversation } from '../store/useSelectedConversation';
-import api from '../lib/axios';
-import { useSocket } from '../hooks/useSocket';
 
 type MessageListProps = {
   // messages: MessageT[];
@@ -76,13 +75,25 @@ export function MessageList({ contact, isTyping }: MessageListProps) {
     }
   };
 
-  // useEffect(() => {
-  //   endRef.current?.scrollIntoView({ behavior: 'smooth' });
-  // }, [messages, isTyping]);
-
   useEffect(() => {
     fetchMessages();
   }, []);
+
+  useEffect(() => {
+    if (isFetchingOlder) return; // prevent scroll when loading old msgs
+
+    requestAnimationFrame(() => {
+      endRef.current?.scrollIntoView({ behavior: 'smooth' });
+    });
+  }, [messages, isTyping]);
+
+  // useEffect(() => {
+  //   if (isFetchingOlder) return;
+
+  //   if (shouldScrollRef.current) {
+  //     scrollToBottom();
+  //   }
+  // }, [messages]);
 
   useLayoutEffect(() => {
     if (!isFetchingOlder || !containerRef.current) return;

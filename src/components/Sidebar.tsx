@@ -1,23 +1,16 @@
 import { useEffect, useState } from 'react';
 import api from '../lib/axios';
-import { useUserDetails } from '../store/userDetailStore';
 import { useSelectedConversation } from '../store/useSelectedConversation';
 import type { ConversationT } from '../types';
 import { ContactItem } from './ContactItem';
 import { SidebarFooter } from './SidebarFooter';
 
-type SidebarProps = {
-  contacts: ConversationT[];
-  activeId: number;
-  onSelectContact: (id: number) => void;
-};
-
-export function Sidebar({ contacts, activeId, onSelectContact }: SidebarProps) {
+export function Sidebar() {
   const [conversations, setConversations] = useState<ConversationT[]>([]);
   const [search, setSearch] = useState('');
 
-  const { userDetail } = useUserDetails();
-  const { updateSelectedConversation } = useSelectedConversation();
+  const { selectedConversation, updateSelectedConversation } =
+    useSelectedConversation();
 
   const filtered = conversations.filter((c) =>
     c.otherUserName.toLowerCase().includes(search.toLowerCase()),
@@ -56,10 +49,9 @@ export function Sidebar({ contacts, activeId, onSelectContact }: SidebarProps) {
           <ContactItem
             key={c.conversationId}
             contact={c}
-            // isActive={activeId === c.}
+            isActive={selectedConversation?.conversationId === c.conversationId}
             onClick={() => {
               updateSelectedConversation(c);
-              onSelectContact(c.conversationId);
             }}
           />
         ))}

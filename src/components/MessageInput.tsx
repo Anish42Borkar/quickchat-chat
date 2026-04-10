@@ -1,19 +1,26 @@
-import { useRef, type ChangeEvent, type KeyboardEvent } from 'react';
+import { useRef, useState, type ChangeEvent, type KeyboardEvent } from 'react';
+import { useSocket } from '../hooks/useSocket';
+import { useSelectedConversation } from '../store/useSelectedConversation';
 
 type MessageInputProps = {
-  value: string;
-  onChange: (data: string) => void;
-  onSend: () => void;
   placeholder: string;
 };
 
-export function MessageInput({
-  value,
-  onChange,
-  onSend,
-  placeholder,
-}: MessageInputProps) {
+export function MessageInput({ placeholder }: MessageInputProps) {
   const ref = useRef(null);
+
+  const { sendMessage } = useSocket();
+  const { selectedConversation } = useSelectedConversation();
+  const [input, setInput] = useState('');
+
+  function onSend() {
+    if (selectedConversation) {
+      const senderid = selectedConversation?.otherUserId;
+      sendMessage(senderid, input);
+      setInput('');
+    }
+  }
+
   const handleKey = (e: KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
@@ -21,7 +28,7 @@ export function MessageInput({
     }
   };
   const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    onChange(e.target.value);
+    setInput(e.target.value);
     e.target.style.height = 'auto';
     e.target.style.height = Math.min(e.target.scrollHeight, 120) + 'px';
   };
@@ -36,13 +43,13 @@ export function MessageInput({
           ref={ref}
           className='msg-input'
           placeholder={placeholder ?? 'Type a message…'}
-          value={value}
+          value={input}
           onChange={handleChange}
           onKeyDown={handleKey}
           rows={1}
         />
         <button className='input-icon-btn'>🎤</button>
-        <button className='send-btn' onClick={onSend} disabled={!value.trim()}>
+        <button className='send-btn' onClick={onSend} disabled={!input.trim()}>
           ➤
         </button>
       </div>
